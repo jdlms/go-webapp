@@ -2,31 +2,22 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/jdlms/go-webapp/views"
 )
 
 func executeTemplate(w http.ResponseWriter, filePath string) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	tpl, err := template.ParseFiles(filePath)
+	t, err := views.Parse(filePath)
 	if err != nil {
-		log.Printf("Parsing error: %v", err)
-
+		log.Printf("parsing template: %v", err)
 		http.Error(w, "There was an error parsing the template.", http.StatusInternalServerError)
 		return
 	}
-	err = tpl.Execute(w, nil)
-	if err != nil {
-		log.Printf("executing template: %v", err)
-
-		http.Error(w, "There was an error executing the template.", http.StatusInternalServerError)
-		return
-	}
+	t.Execute(w, nil)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -38,18 +29,7 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func faqHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	pathParam := chi.URLParam(r, "slug")
-	if pathParam != "" {
-		fmt.Fprintf(w, "<p>This is the article path param: %s</p>", pathParam)
-	}
-	queryParam := r.URL.Query().Get("id")
-	if queryParam != "" {
-		fmt.Fprintf(w, "<p>This is the query param: %s</p>", queryParam)
-	}
-
-	fmt.Fprint(w, "<h1>Welcome to the FAQs page")
+	executeTemplate(w, "templates/faqs.gohtml")
 }
 
 func main() {

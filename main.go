@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/jdlms/go-webapp/controllers"
+	"github.com/jdlms/go-webapp/templates"
 	"github.com/jdlms/go-webapp/views"
 )
 
@@ -14,13 +15,13 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	tpl := views.Must(views.Parse("templates/home.gohtml"))
+	tpl := views.Must(views.ParseFS(templates.FS, "templates/home.gohtml"))
 	r.Get("/", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.Parse("templates/contact.gohtml"))
+	tpl = views.Must(views.ParseFS(templates.FS, "templates/contact.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.Parse("templates/faqs.gohtml"))
+	tpl = views.Must(views.ParseFS(templates.FS, "templates/faqs.gohtml"))
 	r.Get("/faqs", controllers.StaticHandler(tpl))
 
 	// page not found

@@ -15,13 +15,13 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	tpl := views.Must(views.ParseFS(templates.FS, "templates/home.gohtml"))
+	tpl := views.Must(views.ParseFS(templates.FS, "home.gohtml"))
 	r.Get("/", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.ParseFS(templates.FS, "templates/contact.gohtml"))
+	tpl = views.Must(views.ParseFS(templates.FS, "contact.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.ParseFS(templates.FS, "templates/faqs.gohtml"))
+	tpl = views.Must(views.ParseFS(templates.FS, "faqs.gohtml"))
 	r.Get("/faqs", controllers.StaticHandler(tpl))
 
 	// page not found

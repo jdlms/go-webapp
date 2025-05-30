@@ -14,14 +14,15 @@ import (
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-
-	tpl := views.Must(views.ParseFS(templates.FS, "home.gohtml"))
+	// these are variadic functions which accept multiple strings
+	// the order of the html files does matter
+	tpl := views.Must(views.ParseFS(templates.FS, "layout.gohtml", "home.gohtml"))
 	r.Get("/", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.ParseFS(templates.FS, "contact.gohtml"))
+	tpl = views.Must(views.ParseFS(templates.FS, "layout.gohtml", "contact.gohtml"))
 	r.Get("/contact", controllers.StaticHandler(tpl))
 
-	tpl = views.Must(views.ParseFS(templates.FS, "faqs.gohtml"))
+	tpl = views.Must(views.ParseFS(templates.FS, "layout.gohtml", "faqs.gohtml"))
 	r.Get("/faqs", controllers.FAQ(tpl))
 
 	// page not found
